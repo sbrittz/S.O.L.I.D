@@ -1,16 +1,30 @@
-class EmailSender {
+export interface Notifier {
+  send(to: string, message: string): void;
+}
+
+export class EmailSender implements Notifier {
   send(to: string, message: string): void {
     console.log(`Correo para ${to}: ${message}`);
   }
 }
 
-class OrderService {
-  createOrder(customerEmail: string): void {
-    console.log("Pedido creado");
-
-    const emailSender = new EmailSender();
-    emailSender.send(customerEmail, "Tu pedido fue creado");
+export class SmsSender implements Notifier {
+  send(to: string, message: string): void {
+    console.log(`SMS para ${to}: ${message}`);
   }
 }
 
-new OrderService().createOrder("ana@example.com");
+export class OrderService {
+  private readonly notifier: Notifier;
+
+  constructor(notifier: Notifier) {
+    this.notifier = notifier;
+  }
+
+  createOrder(customerEmail: string): void {
+    console.log("Pedido creado");
+    this.notifier.send(customerEmail, "Tu pedido fue creado");
+  }
+}
+
+new OrderService(new EmailSender()).createOrder("ana@example.com");

@@ -1,5 +1,20 @@
-class Rectangle {
-  constructor(protected width: number, protected height: number) {}
+export interface Shape {
+  area(): number;
+}
+
+export interface ResizableShape extends Shape {
+  setWidth(width: number): void;
+  setHeight(height: number): void;
+}
+
+export class Rectangle implements ResizableShape {
+  private width: number;
+  private height: number;
+
+  constructor(width: number, height: number) {
+    this.width = width;
+    this.height = height;
+  }
 
   setWidth(width: number): void {
     this.width = width;
@@ -14,23 +29,31 @@ class Rectangle {
   }
 }
 
-class Square extends Rectangle {
+export class Square implements ResizableShape {
+  private side: number;
+
+  constructor(side: number) {
+    this.side = side;
+  }
+
   setWidth(width: number): void {
-    this.width = width;
-    this.height = width;
+    this.side = width;
   }
 
   setHeight(height: number): void {
-    this.width = height;
-    this.height = height;
+    this.side = height;
+  }
+
+  area(): number {
+    return this.side * this.side;
   }
 }
 
-function resizeRectangle(rectangle: Rectangle): void {
-  rectangle.setWidth(5);
-  rectangle.setHeight(10);
-  console.log(`Area esperada: 50. Area obtenida: ${rectangle.area()}`);
+export function resizeRectangle(shape: ResizableShape): void {
+  shape.setWidth(5);
+  shape.setHeight(10);
+  console.log(`Area obtenida: ${shape.area()}`);
 }
 
 resizeRectangle(new Rectangle(1, 1));
-resizeRectangle(new Square(1, 1));
+resizeRectangle(new Square(1));

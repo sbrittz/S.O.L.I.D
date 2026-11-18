@@ -1,18 +1,35 @@
-type PaymentType = "card" | "cash";
+export interface PaymentMethod {
+  pay(amount: number): void;
+}
 
-class PaymentProcessor {
-  pay(type: PaymentType, amount: number): void {
-    switch (type) {
-      case "card":
-        console.log(`Pagando $${amount} con tarjeta`);
-        break;
-      case "cash":
-        console.log(`Pagando $${amount} en efectivo`);
-        break;
-      default:
-        throw new Error("Medio de pago no soportado");
-    }
+export class CardPayment implements PaymentMethod {
+  pay(amount: number): void {
+    console.log(`Pagando $${amount} con tarjeta`);
   }
 }
 
-new PaymentProcessor().pay("card", 100);
+export class CashPayment implements PaymentMethod {
+  pay(amount: number): void {
+    console.log(`Pagando $${amount} en efectivo`);
+  }
+}
+
+export class TransferPayment implements PaymentMethod {
+  pay(amount: number): void {
+    console.log(`Pagando $${amount} por transferencia`);
+  }
+}
+
+export class PaymentProcessor {
+  private readonly method: PaymentMethod;
+
+  constructor(method: PaymentMethod) {
+    this.method = method;
+  }
+
+  pay(amount: number): void {
+    this.method.pay(amount);
+  }
+}
+
+new PaymentProcessor(new CardPayment()).pay(100);

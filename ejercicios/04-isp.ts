@@ -1,20 +1,32 @@
-interface MultifunctionPrinter {
+export interface Printer {
   print(document: string): void;
+}
+
+export interface Scanner {
   scan(document: string): void;
+}
+
+export interface Fax {
   fax(document: string): void;
 }
 
-class SimplePrinter implements MultifunctionPrinter {
+export class SimplePrinter implements Printer {
+  print(document: string): void {
+    console.log(`Imprimiendo: ${document}`);
+  }
+}
+
+export class MultifunctionPrinter implements Printer, Scanner, Fax {
   print(document: string): void {
     console.log(`Imprimiendo: ${document}`);
   }
 
-  scan(_document: string): void {
-    throw new Error("Esta impresora no puede escanear");
+  scan(document: string): void {
+    console.log(`Escaneando: ${document}`);
   }
 
-  fax(_document: string): void {
-    throw new Error("Esta impresora no puede enviar fax");
+  fax(document: string): void {
+    console.log(`Enviando fax: ${document}`);
   }
 }
 
